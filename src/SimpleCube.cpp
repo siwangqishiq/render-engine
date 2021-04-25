@@ -55,13 +55,13 @@ void SimpleCubeScene::update(long long deltaTime){
 
 //创建材质
 Material SimpleCubeScene::createMaterial(){
-    //material = Material::buildMaterial(Material::MaterialEnum::Normal);
-    material = Material::buildMaterial(Material::MaterialEnum::Plastic);
+    material = Material::buildMaterial(Material::MaterialEnum::Normal);
+    // material = Material::buildMaterial(Material::MaterialEnum::Plastic);
     return material;
 }
 
 std::shared_ptr<DirectionalLight> SimpleCubeScene::createDirectionalLight(){
-    glm::vec3 dir = glm::vec3(0 , 0, 0) - glm::vec3(1 , 1, 0);
+    glm::vec3 dir = glm::vec3(0 , 0, 0) - glm::vec3(1 , 1, 1);
 
     this->light = std::make_shared<DirectionalLight>(dir);
 
