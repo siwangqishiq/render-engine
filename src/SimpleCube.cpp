@@ -34,6 +34,7 @@ void SimpleCubeScene::update(long long deltaTime){
     glm::mat4 modelMat = glm::mat4(1.0f);
    
     modelMat = glm::translate(modelMat, this->pos);
+    modelMat = glm::rotate(modelMat , angleX , glm::vec3(1 , 0, 0));
     modelMat = glm::rotate(modelMat , angleY , glm::vec3(0 , 1, 0));
 
     glm::vec3 cameraPosition = camera->getPostion();
@@ -77,7 +78,8 @@ void SimpleCubeScene::processInput(GLFWwindow *window){
     Scene::processInput(window);
 
     if(glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
-       light->lightColor = glm::vec3(1.0 , 1.0 , 1.0);
+        light->lightColor = glm::vec3(1.0 , 1.0 , 1.0);
+        angleX = 0.0f;
         angleY = 0.0f;
     } 
 
@@ -103,6 +105,14 @@ void SimpleCubeScene::processInput(GLFWwindow *window){
 
     if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
        angleY -= glm::radians(0.1f);
+    }  
+
+    if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+       angleX += glm::radians(0.1f);
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+       angleX -= glm::radians(0.1f);
     }  
 
     if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {

@@ -56,6 +56,7 @@ private:
     unsigned int vao;
     unsigned int vbo;
 
+    float angleX = 0.0f;
     float angleY = 0.0f;
 
     //phong着色
