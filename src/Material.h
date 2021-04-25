@@ -12,7 +12,9 @@ public:
     };
     static Material buildMaterial(MaterialEnum materialType);
 
-    Material(glm::vec3 _diffuse , glm::vec3 specular , float _shininess);
+    Material();
+
+    Material(glm::vec3 _diffuse , glm::vec3 _specular , float _shininess);
 
     glm::vec3 diffuse; //漫反射颜色
     glm::vec3 specular; //镜面反射颜色

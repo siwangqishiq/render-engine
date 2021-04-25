@@ -11,38 +11,42 @@ struct Material{
     float shininess; //材质粗糙度
 };
 
-struct LightDir{ //平行光光源
+struct LightDirectional{ //平行光光源
     float ambientWeight;//环境光权值
     float diffuseWeight;//
     float specularWeight;
 
     vec3 lightColor;//光颜色
-    vec3 lightDirectional; //平行光方向
+    vec3 lightDir; //平行光方向
 };
 
 uniform Material material;
-uniform LightDir light;
+uniform LightDirectional light;
 uniform vec3 cameraPos;//观察者位置
 
 out vec4 fragColor;
 
 void main(){
+    vec3 result;
+
     vec3 ambient = light.lightColor * light.ambientWeight;
-  	
+    result += ambient;
+
+    vec3 normal = normalize(vNormal);
     // diffuse 
-    // vec3 normal = normalize(vNormal);
-    // vec3 lightDir = -normalize(light.lightDirectional);
-    // float diff = max(dot(normal, lightDir), 0.0);
-    // vec3 diffuse = light.diffuse * (diff * material.diffuse);
-    vec3 diffuse = vec3(1 ,0 ,0);
+    vec3 lightDir = -normalize(light.lightDir);
+    float diff = max(dot(normal, lightDir), 0.0);
+    vec3 diffuse = light.diffuseWeight * (diff * material.diffuse);
+    result += diffuse;
     
-    // // specular
-    // vec3 cameraDir = normalize(cameraPos - vWorldPos);
-    // vec3 reflectDir = reflect(-lightDir, normal);  
-    // float spec = pow(max(dot(cameraDir, reflectDir), 0.0), material.shininess);
-    // vec3 specular = light.specular * (spec * material.specular);
-    vec3 specular = vec3(0 ,0 ,0);  
+    //specular
+    vec3 cameraDir = normalize(cameraPos - vWorldPos);
+    vec3 reflectDir = reflect(-lightDir, normal);  
+    float spec = pow(max(dot(cameraDir, reflectDir), 0.0), material.shininess);
     
-    vec3 result = ambient + diffuse + specular;
+    vec3 specular = light.specularWeight * (spec * material.specular);
+    specular = vec3(spec , spec , spec);
+    result += specular;
+    
     fragColor = vec4(result, 1.0);
 }

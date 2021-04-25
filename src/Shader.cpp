@@ -109,24 +109,29 @@ void Shader::setUniformInt(std::string key , int value){
     glUniform1i(loc , value);
 }
 
-void Shader::setUnifromMat4(std::string key , glm::mat4 mat){
+void Shader::setUniformFloat(std::string key , float value){
+    GLint loc = findUniformLocation(key);
+    glUniform1f(loc , value);
+}
+
+void Shader::setUniformMat4(std::string key , glm::mat4 mat){
     GLint loc = findUniformLocation(key);
 	glUniformMatrix4fv(loc , 1 , GL_FALSE , glm::value_ptr(mat));
 }
 
-void Shader::setUnifromVec3(std::string key , float x , float y , float z){
+void Shader::setUniformVec3(std::string key , float x , float y , float z){
 	GLint loc = findUniformLocation(key);
 	glUniform3f(loc , x , y , z);
 }
 
-void Shader::setUnifromVec2(std::string key , float x , float y){
+void Shader::setUniformVec3(std::string key ,glm::vec3 value){
 	GLint loc = findUniformLocation(key);
-	glUniform2f(loc , x , y);
+	glUniform3fv(loc , 1 , (float *)(&value[0]));
 }
 
-//设置材质数据组到shader
-void Shader::setMaterialData(Material &material){
-	
+void Shader::setUniformVec2(std::string key , float x , float y){
+	GLint loc = findUniformLocation(key);
+	glUniform2f(loc , x , y);
 }
 
 int Shader::findUniformLocation(std::string key){
@@ -139,5 +144,32 @@ int Shader::findUniformLocation(std::string key){
 		unifromLocs[key] = loc;
 	}
 	return loc;
+}
+
+
+//
+PhongShader PhongShader::buildPhongShaderFromFile(std::string vertexFileName , std::string fragFileName){
+	PhongShader shader;
+    GLuint id = CreateGPUProgramFromFile(SHADER_FOLDER + vertexFileName , SHADER_FOLDER + fragFileName);
+    shader.programId = id;
+    return shader;
+}
+
+//设置材质数据组到shader
+void PhongShader::setMaterialData(Material &material){
+	setUniformVec3("material.diffuse" , material.diffuse);
+	setUniformVec3("material.specular" , material.specular);
+	setUniformFloat("material.shininess", material.shininess);
+}
+
+//设置平行光光源
+void PhongShader::setDirectionalLightData(DirectionalLight &light){
+	setUniformFloat("light.ambientWeight", light.ambientWeight);
+
+	setUniformFloat("light.diffuseWeight", light.diffuseWeight);
+	setUniformFloat("light.specularWeight", light.specularWeight);
+
+	setUniformVec3("light.lightColor",light.lightColor);
+	setUniformVec3("light.lightDir",light.directional);
 }
 

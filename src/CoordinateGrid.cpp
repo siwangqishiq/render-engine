@@ -37,9 +37,9 @@ void CoordinateGrid::render(Camera &camera){
 
     shader.useShader();
     glm::mat4 modelMat = glm::mat4(1.0f);
-    shader.setUnifromMat4("modelMat" , modelMat);
-    shader.setUnifromMat4("viewMat", camera.getCameraMatrix());
-    shader.setUnifromMat4("projMat", camera.getPerspectiveMatrix());
+    shader.setUniformMat4("modelMat" , modelMat);
+    shader.setUniformMat4("viewMat", camera.getCameraMatrix());
+    shader.setUniformMat4("projMat", camera.getPerspectiveMatrix());
 
 
     glDrawArrays(GL_LINES , 0 , vertices.size() / 6);

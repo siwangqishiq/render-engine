@@ -15,7 +15,7 @@ public:
     ~Scene();
 
     //摄像机移动速度
-    float moveSpeed =0.04f;
+    float moveSpeed =0.01f;
 
     //构建自定义Camera
     virtual std::shared_ptr<Camera> buildCamera();

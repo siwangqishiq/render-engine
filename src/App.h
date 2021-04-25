@@ -50,7 +50,7 @@ public:
 	~App();
 
 protected:
-	std::string title = "你好 世界";
+	std::string title = "Fuck Alibaba suck my dick!!!";
 
 	const int screenWidth = 1280;
 	const int screenHeight = 800;

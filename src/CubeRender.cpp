@@ -51,13 +51,13 @@ void CubeRender::update(long long deltaTime){
     cameraPosition[2] += 1.0;
     camera->lookAt(glm::vec3(0,0,0));
     
-    shader.setUnifromMat4("modelMat" , modelMat);
+    shader.setUniformMat4("modelMat" , modelMat);
 
     glm::vec3 p = camera->getPostion();
     //std::cout << "pos = " << p[0] << " " << p[1] << " " << p[2] << std::endl;
 
-    shader.setUnifromMat4("viewMat", camera->getCameraMatrix());
-    shader.setUnifromMat4("projMat", camera->getPerspectiveMatrix());
+    shader.setUniformMat4("viewMat", camera->getCameraMatrix());
+    shader.setUniformMat4("projMat", camera->getPerspectiveMatrix());
 
     glBindTexture(GL_TEXTURE_2D , this->textureId);
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Scene.h"
+#include <memory>
+#include "Light.h"
 
 //单个立方体场景
 class SimpleCubeScene : public Scene{
@@ -54,8 +56,22 @@ private:
     unsigned int vao;
     unsigned int vbo;
 
+    float angleY = 0.0f;
+
     //phong着色
-    Shader phongShader;
+    PhongShader phongShader;
+
+    //材质
+    Material material;
+    
+    //平行光光源
+    std::shared_ptr<DirectionalLight> light;
+
+    Material createMaterial();
+
+    std::shared_ptr<DirectionalLight> createDirectionalLight();
+
+    void processInput(GLFWwindow *window);
 public:
     virtual void onInit();
     virtual void update(long long deltaTime);
