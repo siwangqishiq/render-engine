@@ -47,6 +47,8 @@ void SimpleCubeScene::update(long long deltaTime){
 
     phongShader.setUniformVec3("cameraPos" , camera->getPostion());
     phongShader.setMaterialData(material);
+
+    phongShader.enableDirectionalLight(enableDirectionalLight);
     phongShader.setDirectionalLightData(*light);
 
     glDrawArrays(GL_TRIANGLES , 0 , 36);
@@ -138,4 +140,15 @@ void SimpleCubeScene::processInput(GLFWwindow *window){
        lg[2] -= 0.1f;
        light->directional = glm::normalize(lg);
     } 
+
+
+   if(glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+      //phongShader.enableDirectionalLight(true);
+      pressedKeyO = true;
+   } 
+
+   if(pressedKeyO && glfwGetKey(window, GLFW_KEY_O) == GLFW_RELEASE) {
+      pressedKeyO = false;
+      enableDirectionalLight = !enableDirectionalLight;
+   } 
 }

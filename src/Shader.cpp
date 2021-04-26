@@ -134,6 +134,11 @@ void Shader::setUniformVec2(std::string key , float x , float y){
 	glUniform2f(loc , x , y);
 }
 
+void Shader::setUniformBool(std::string key , bool value){
+	GLint loc = findUniformLocation(key);
+	glUniform1i(loc , value);
+}
+
 int Shader::findUniformLocation(std::string key){
 	if(unifromLocs.find(key) != unifromLocs.end()){
 		return unifromLocs[key];
@@ -160,6 +165,10 @@ void PhongShader::setMaterialData(Material &material){
 	setUniformVec3("material.diffuse" , material.diffuse);
 	setUniformVec3("material.specular" , material.specular);
 	setUniformFloat("material.shininess", material.shininess);
+}
+
+void PhongShader::enableDirectionalLight(bool enable){
+	setUniformBool("uDirectionalLightEnable" , enable);
 }
 
 //设置平行光光源

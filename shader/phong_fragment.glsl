@@ -20,15 +20,34 @@ struct LightDirectional{ //平行光光源
     vec3 lightDir; //平行光方向
 };
 
+struct LightPoint{//点光源
+    vec3 lightColor;//光颜色
+    vec3 position;//点光源位置
+
+    float ambientWeight;//环境光权值
+    float diffuseWeight;//
+    float specularWeight;
+
+    //衰减方程参数
+    float k0;
+    float k1;
+    float k2;
+};
+
+
+uniform bool uDirectionalLightEnable;
+uniform bool uPointLightEnable;
+
 uniform Material material;
 uniform LightDirectional light;
+uniform LightPoint uPointLight;
 uniform vec3 cameraPos;//观察者位置
 
 out vec4 fragColor;
 
-void main(){
+vec3 computeDiretionalLight(LightDirectional light){
     vec3 result;
-
+    
     vec3 ambient = light.lightColor * light.ambientWeight;
     result += ambient;
 
@@ -47,6 +66,20 @@ void main(){
     vec3 specular = light.specularWeight * (spec * material.specular);
     specular = vec3(spec , spec , spec);
     result += specular;
+
+    return result;
+}
+
+void main(){
+    vec3 result;
+
+    if(uDirectionalLightEnable){
+        result += computeDiretionalLight(light);
+    }
+    
+    if(uPointLightEnable){
+        
+    }
     
     fragColor = vec4(result, 1.0);
 }

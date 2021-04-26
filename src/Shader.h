@@ -45,6 +45,8 @@ public:
 
     //设置三维向量 
     void setUniformVec3(std::string key ,glm::vec3 value);
+
+    void setUniformBool(std::string key , bool value);
     
     int findUniformLocation(std::string key);
 protected:
@@ -56,6 +58,9 @@ protected:
 class PhongShader : public Shader{
 public:
     static PhongShader buildPhongShaderFromFile(std::string vertexShaderPath , std::string fragShaderPath);
+    
+    //设置是否启动平行光光源
+    void enableDirectionalLight(bool enable);
 
     //设置平行光光源
     void setDirectionalLightData(DirectionalLight &directionLight);

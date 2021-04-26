@@ -59,6 +59,9 @@ private:
     float angleX = 0.0f;
     float angleY = 0.0f;
 
+    bool pressedKeyO = false;
+    bool enableDirectionalLight = true;
+
     //phong着色
     PhongShader phongShader;
 

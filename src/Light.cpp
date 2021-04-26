@@ -9,3 +9,12 @@ DirectionalLight::~DirectionalLight(){
     
 }
 
+PointLight::PointLight(glm::vec3 _position , glm::vec3 _lightColor){
+    this->position = _position;
+    this->lightColor = _lightColor;
+}
+
+PointLight::~PointLight(){
+
+}
+
