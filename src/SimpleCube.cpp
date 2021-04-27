@@ -26,34 +26,38 @@ void SimpleCubeScene::onInit(){
     //
     createMaterial();
     createDirectionalLight();
+    createPointLight();
 }
 
 void SimpleCubeScene::update(long long deltaTime){
-    glBindVertexArray(vao);
+   glBindVertexArray(vao);
 
-    glm::mat4 modelMat = glm::mat4(1.0f);
+   glm::mat4 modelMat = glm::mat4(1.0f);
+
+   modelMat = glm::translate(modelMat, this->pos);
+   modelMat = glm::rotate(modelMat , angleX , glm::vec3(1 , 0, 0));
+   modelMat = glm::rotate(modelMat , angleY , glm::vec3(0 , 1, 0));
+
+   glm::vec3 cameraPosition = camera->getPostion();
+   camera->lookAt(glm::vec3(0,0,0));
    
-    modelMat = glm::translate(modelMat, this->pos);
-    modelMat = glm::rotate(modelMat , angleX , glm::vec3(1 , 0, 0));
-    modelMat = glm::rotate(modelMat , angleY , glm::vec3(0 , 1, 0));
+   phongShader.useShader();
+   phongShader.setUniformMat4("modelMat" , modelMat);
+   phongShader.setUniformMat4("viewMat", camera->getCameraMatrix());
+   phongShader.setUniformMat4("projMat", camera->getPerspectiveMatrix());
+   
+   phongShader.setUniformVec3("cameraPos" , camera->getPostion());
+   phongShader.setMaterialData(material);
 
-    glm::vec3 cameraPosition = camera->getPostion();
-    camera->lookAt(glm::vec3(0,0,0));
-    
-    phongShader.useShader();
-    phongShader.setUniformMat4("modelMat" , modelMat);
-    phongShader.setUniformMat4("viewMat", camera->getCameraMatrix());
-    phongShader.setUniformMat4("projMat", camera->getPerspectiveMatrix());
+   // phongShader.enableDirectionalLight(enableDirectionalLight);
+   // phongShader.setDirectionalLightData(&(*light));
 
-    phongShader.setUniformVec3("cameraPos" , camera->getPostion());
-    phongShader.setMaterialData(material);
+   phongShader.enablePointLight(enablePointLight);
+   phongShader.setPointLightData(pointLight);
 
-    phongShader.enableDirectionalLight(enableDirectionalLight);
-    phongShader.setDirectionalLightData(*light);
-
-    glDrawArrays(GL_TRIANGLES , 0 , 36);
-    
-    glBindVertexArray(0);
+   glDrawArrays(GL_TRIANGLES , 0 , 36);
+   
+   glBindVertexArray(0);
 }
 
 //创建材质
@@ -64,82 +68,84 @@ Material SimpleCubeScene::createMaterial(){
 }
 
 std::shared_ptr<DirectionalLight> SimpleCubeScene::createDirectionalLight(){
-    glm::vec3 dir = glm::vec3(0 , 0, 0) - glm::vec3(1 , 1, 1);
+   glm::vec3 dir = glm::vec3(0 , 0, 0) - glm::vec3(1 , 1, 1);
 
-    this->light = std::make_shared<DirectionalLight>(dir);
+   this->light = std::make_shared<DirectionalLight>(dir);
 
-    return light;
+   return light;
+}
+
+PointLight *SimpleCubeScene::createPointLight(){
+   pointLight = new PointLight(glm::vec3(0, 3, 0));
+   return pointLight;
 }
 
 void SimpleCubeScene::onDestory(){
-    glDeleteBuffers(1 , &vbo);
-    glDeleteVertexArrays(1 , &vao);
+   if(pointLight != nullptr){
+      delete pointLight;
+      pointLight = nullptr;
+   }
+
+   glDeleteBuffers(1 , &vbo);
+   glDeleteVertexArrays(1 , &vao);
 } 
 
 void SimpleCubeScene::processInput(GLFWwindow *window){
-    Scene::processInput(window);
+   Scene::processInput(window);
 
-    if(glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
-        light->lightColor = glm::vec3(1.0 , 1.0 , 1.0);
-        angleX = 0.0f;
-        angleY = 0.0f;
-    } 
+   if(glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
+      light->lightColor = glm::vec3(1.0 , 1.0 , 1.0);
+      angleX = 0.0f;
+      angleY = 0.0f;
+   } 
 
-    if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-       light->lightColor = glm::vec3(1.0 , 0 , 0);
-    } 
+   if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+      light->lightColor = glm::vec3(1.0 , 0 , 0);
+   } 
 
-    if(glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-       light->lightColor = glm::vec3(1.0 , 1.0 , 0);
-    } 
+   if(glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+      light->lightColor = glm::vec3(1.0 , 1.0 , 0);
+   } 
 
-    if(glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-       light->lightColor = glm::vec3(0.0 , 1.0 , 0);
-    } 
+   if(glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+      light->lightColor = glm::vec3(0.0 , 1.0 , 0);
+   } 
 
-    if(glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-       light->lightColor = glm::vec3(0.0 , 0.0 , 1.0);
-    } 
+   if(glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+      light->lightColor = glm::vec3(0.0 , 0.0 , 1.0);
+   } 
 
-    if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-       angleY += glm::radians(0.1f);
-    }
+   if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+      angleY += glm::radians(0.1f);
+   }
 
-    if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-       angleY -= glm::radians(0.1f);
-    }  
+   if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+      angleY -= glm::radians(0.1f);
+   }  
 
-    if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-       angleX += glm::radians(0.1f);
-    }
+   if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+      angleX += glm::radians(0.1f);
+   }
 
-    if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-       angleX -= glm::radians(0.1f);
-    }  
+   if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+      angleX -= glm::radians(0.1f);
+   }  
 
-    if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-        glm::vec3 lg = light->directional;
-        lg[0] += 0.1f;
-        light->directional = glm::normalize(lg);
-    }
+   if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+      pointLight->position[0] += 0.01f;
+   }
 
-    if(glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-        glm::vec3 lg = light->directional;
-        lg[0] -= 0.1f;
-        light->directional = glm::normalize(lg);
-    }
+   if(glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+      pointLight->position[0] -= 0.01f;
+   }
 
-    if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-       glm::vec3 lg = light->directional;
-       lg[2] += 0.1f;
-       light->directional = glm::normalize(lg);
-    }
+   if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+      pointLight->position[2] += 0.01f;
+   }
 
-    if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-       glm::vec3 lg = light->directional;
-       lg[2] -= 0.1f;
-       light->directional = glm::normalize(lg);
-    } 
+   if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+      pointLight->position[2] -= 0.01f;
+   } 
 
 
    if(glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
@@ -149,6 +155,6 @@ void SimpleCubeScene::processInput(GLFWwindow *window){
 
    if(pressedKeyO && glfwGetKey(window, GLFW_KEY_O) == GLFW_RELEASE) {
       pressedKeyO = false;
-      enableDirectionalLight = !enableDirectionalLight;
+      enablePointLight = !enablePointLight;
    } 
 }

@@ -60,7 +60,8 @@ private:
     float angleY = 0.0f;
 
     bool pressedKeyO = false;
-    bool enableDirectionalLight = true;
+    bool enableDirectionalLight = false;
+    bool enablePointLight = true;
 
     //phong着色
     PhongShader phongShader;
@@ -71,9 +72,13 @@ private:
     //平行光光源
     std::shared_ptr<DirectionalLight> light;
 
+    PointLight *pointLight = nullptr;
+
     Material createMaterial();
 
     std::shared_ptr<DirectionalLight> createDirectionalLight();
+
+    PointLight *createPointLight();
 
     void processInput(GLFWwindow *window);
 public:

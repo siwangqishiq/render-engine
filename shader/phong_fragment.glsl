@@ -64,21 +64,47 @@ vec3 computeDiretionalLight(LightDirectional light){
     float spec = pow(max(dot(cameraDir, reflectDir), 0.0), material.shininess);
     
     vec3 specular = light.specularWeight * (spec * material.specular);
-    specular = vec3(spec , spec , spec);
     result += specular;
 
     return result;
 }
 
-void main(){
+vec3 computePointLight(LightPoint lightPoint){
     vec3 result;
+    
+    float distance = length(lightPoint.position - vWorldPos);
+    float strength = 1.0/(lightPoint.k0 + lightPoint.k1 * distance + lightPoint.k2 * distance * distance);
+
+    vec3 ambient = lightPoint.lightColor * lightPoint.ambientWeight;
+    result += strength * ambient;
+
+    vec3 normal = normalize(vNormal);
+    // diffuse 
+
+    vec3 lightDir = -normalize(vWorldPos - lightPoint.position);
+    float diff = max(dot(normal, lightDir), 0.0);
+    vec3 diffuse = lightPoint.diffuseWeight * (diff * material.diffuse);
+    result += (strength * diffuse);
+    
+    //specular
+    vec3 cameraDir = normalize(cameraPos - vWorldPos);
+    vec3 reflectDir = reflect(-lightDir, normal);  
+    float spec = pow(max(dot(cameraDir, reflectDir), 0.0), material.shininess);
+    vec3 specular = lightPoint.specularWeight * (spec * material.specular);
+    result += (strength * specular);
+    //result = vec3(strength * specular);
+    return result;
+}
+
+void main(){
+    vec3 result = vec3(0 , 0, 0);
 
     if(uDirectionalLightEnable){
         result += computeDiretionalLight(light);
     }
     
     if(uPointLightEnable){
-        
+        result += computePointLight(uPointLight);
     }
     
     fragColor = vec4(result, 1.0);

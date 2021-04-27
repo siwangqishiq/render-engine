@@ -172,13 +172,32 @@ void PhongShader::enableDirectionalLight(bool enable){
 }
 
 //设置平行光光源
-void PhongShader::setDirectionalLightData(DirectionalLight &light){
-	setUniformFloat("light.ambientWeight", light.ambientWeight);
+void PhongShader::setDirectionalLightData(DirectionalLight *light){
+	setUniformFloat("light.ambientWeight", light->ambientWeight);
 
-	setUniformFloat("light.diffuseWeight", light.diffuseWeight);
-	setUniformFloat("light.specularWeight", light.specularWeight);
+	setUniformFloat("light.diffuseWeight", light->diffuseWeight);
+	setUniformFloat("light.specularWeight", light->specularWeight);
 
-	setUniformVec3("light.lightColor",light.lightColor);
-	setUniformVec3("light.lightDir",light.directional);
+	setUniformVec3("light.lightColor",light->lightColor);
+	setUniformVec3("light.lightDir",light->directional);
+}
+
+//启用or关闭点光源
+void PhongShader::enablePointLight(bool enable){
+	setUniformBool("uPointLightEnable" , enable);
+}
+
+//设置点光源数据
+void PhongShader::setPointLightData(PointLight *light){
+	setUniformFloat("uPointLight.ambientWeight", light->ambientWeight);
+	setUniformFloat("uPointLight.diffuseWeight", light->diffuseWeight);
+	setUniformFloat("uPointLight.specularWeight", light->specularWeight);
+	
+	setUniformFloat("uPointLight.k0", light->k0);
+	setUniformFloat("uPointLight.k1", light->k1);
+	setUniformFloat("uPointLight.k2", light->k2);
+	
+	setUniformVec3("uPointLight.lightColor",light->lightColor);
+	setUniformVec3("uPointLight.position",light->position);
 }
 

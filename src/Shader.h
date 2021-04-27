@@ -63,7 +63,13 @@ public:
     void enableDirectionalLight(bool enable);
 
     //设置平行光光源
-    void setDirectionalLightData(DirectionalLight &directionLight);
+    void setDirectionalLightData(DirectionalLight *directionLight);
+
+    //启用or关闭点光源
+    void enablePointLight(bool enable);
+
+    //设置点光源数据
+    void setPointLightData(PointLight *light);
 
     //设置材质数据组到shader
     void setMaterialData(Material &material);
