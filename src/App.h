@@ -5,8 +5,8 @@
 
 #include <iostream>
 #include <string>
+#include "config.h"
 
-static std::string ASSETS_FOLDER = "assets/";
 
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 

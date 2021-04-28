@@ -7,20 +7,20 @@
 #include <unordered_map>
 #include "Material.h"
 #include "Light.h"
+#include "config.h"
 
-static std::string SHADER_FOLDER = "shader/";
 
 //编译shader源码
-static GLuint CompileShader(GLenum shaderType, const char* shaderSource);
+GLuint CompileShader(GLenum shaderType, const char* shaderSource);
 
 //创建完整Shader
-static GLuint CreateGPUProgram(const char* vsShaderSource, const char* fsShaderSource);
+GLuint CreateGPUProgram(const char* vsShaderSource, const char* fsShaderSource);
 
 //读取文本文件
-static std::string ReadFileAsText(std::string path);
+std::string ReadFileAsText(std::string path);
 
 //从文件中创建shader
-static GLuint CreateGPUProgramFromFile(std::string vertexShaderPath , std::string fragShaderPath);
+GLuint CreateGPUProgramFromFile(std::string vertexShaderPath , std::string fragShaderPath);
 
 class Shader{
 public:

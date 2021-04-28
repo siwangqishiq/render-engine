@@ -10,7 +10,7 @@ Shader Shader::buildGPUProgramFromFile(std::string vertexFileName , std::string 
     return shader;
 }
 
-static GLuint CreateGPUProgram(const char* vsShaderSource, const char* fsShaderSource) {
+GLuint CreateGPUProgram(const char* vsShaderSource, const char* fsShaderSource) {
 	GLuint vsShader = CompileShader(GL_VERTEX_SHADER, vsShaderSource);
 	GLuint fsShader = CompileShader(GL_FRAGMENT_SHADER, fsShaderSource);
 
@@ -46,7 +46,7 @@ static GLuint CreateGPUProgram(const char* vsShaderSource, const char* fsShaderS
 }
 
 //读取文本文件
-static std::string ReadFileAsText(std::string path){
+std::string ReadFileAsText(std::string path){
 	std::string content;
 	std::ifstream infile(path);
 	if(infile.is_open()){
@@ -58,18 +58,19 @@ static std::string ReadFileAsText(std::string path){
 	}else{
 		std::cout << "open file : " << path << " error "<<std::endl;
 	}
+	infile.close();
 	return content;
 }
 
 //从文件中创建shader
-static GLuint CreateGPUProgramFromFile(std::string vertexShaderPath , std::string fragShaderPath){
+GLuint CreateGPUProgramFromFile(std::string vertexShaderPath , std::string fragShaderPath){
 	std::string vertexSrc = ReadFileAsText(vertexShaderPath);
 	std::string fragSrc = ReadFileAsText(fragShaderPath);
 
 	return CreateGPUProgram(vertexSrc.c_str() , fragSrc.c_str());
 }
 
-static GLuint CompileShader(GLenum shaderType, const char* shaderSource) {
+GLuint CompileShader(GLenum shaderType, const char* shaderSource) {
 	GLuint shader = glCreateShader(shaderType);
 	if (shader == 0) {
 		std::cout << "create shader fail:" << shaderSource << std::endl;

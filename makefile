@@ -9,7 +9,6 @@ build_dir:
 	mkdir -p ${BUILD_DIR}
 
 compile: build_dir \
-		${BUILD_DIR}/main.o \
 		${BUILD_DIR}/glad.o \
 		${BUILD_DIR}/App.o \
 		${BUILD_DIR}/Camera.o \
@@ -19,7 +18,9 @@ compile: build_dir \
 		${BUILD_DIR}/Light.o \
 		${BUILD_DIR}/SimpleCube.o \
 		${BUILD_DIR}/CubeRender.o \
-		${BUILD_DIR}/CoordinateGrid.o
+		${BUILD_DIR}/Model.o \
+		${BUILD_DIR}/CoordinateGrid.o \
+		${BUILD_DIR}/main.o 
 
 ${BUILD_DIR}/App.o:${SRC_DIR}/App.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/App.cpp -o ${BUILD_DIR}/App.o -I include/
@@ -35,6 +36,9 @@ ${BUILD_DIR}/Scene.o:${SRC_DIR}/Scene.cpp
 
 ${BUILD_DIR}/Material.o:${SRC_DIR}/Material.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/Material.cpp -o ${BUILD_DIR}/Material.o -I include/
+
+${BUILD_DIR}/Model.o:${SRC_DIR}/Model.cpp
+	${CC} -std=${STD} -c ${SRC_DIR}/Model.cpp -o ${BUILD_DIR}/Model.o -I include/
 
 ${BUILD_DIR}/Light.o:${SRC_DIR}/Light.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/Light.cpp -o ${BUILD_DIR}/Light.o -I include/
