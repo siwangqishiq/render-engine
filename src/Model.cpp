@@ -43,7 +43,7 @@ std::vector<Material> Model::LoadAndParseMtlFile(std::string mtlFilePath){
         //std::cout << type << std::endl;
 
         if(type == "newmtl"){ //新材质 newmtl
-            std::cout << parts[1] << std::endl;
+            //std::cout <<"newmtl : " << parts[1] << std::endl;
             if(curMaterial != nullptr){
                 materialVec.push_back(*curMaterial);
             }
@@ -92,6 +92,9 @@ std::vector<Material> Model::LoadAndParseMtlFile(std::string mtlFilePath){
         materialVec.push_back(*curMaterial);
     }
     
+    //close file
+    infile.close();
+    
     return materialVec;
 }
 
@@ -111,3 +114,172 @@ void Model::parseObjFileMapCommand(std::shared_ptr<Material> material , std::vec
         material->bumpFile = filepath;
     }
 }
+
+
+ObjModel::ObjModel(){
+
+}
+
+/**
+ * 导入 并读取obj文件
+ * 
+ * */
+int ObjModel::loadObjFile(std::string path){
+    std::ifstream infile;
+    infile.open(path.data()); 
+    if(!infile.is_open()){
+        std::cout << path << " open failed !" << std::endl;
+        infile.close();
+        return -1;
+    }
+
+    std::string lineContent;
+
+    materialList.clear();//材质列表清空
+
+    
+
+    //postion
+    std::vector<glm::vec3> positionVec;
+    positionVec.push_back(glm::vec3(0.0f));
+
+    //texCoord
+    std::vector<glm::vec2> texCoordVec;
+    texCoordVec.push_back(glm::vec2(0.0f));
+
+    //normal
+    std::vector<glm::vec3> normalVec;
+    normalVec.push_back(glm::vec3(0.0f));
+
+    while(std::getline(infile , lineContent)){
+        std::string content = StringUtils::trim(lineContent);
+        if(content.empty() || content[0] == '#'){ //
+			continue;
+		}
+
+        std::vector<std::string> parts = StringUtils::split(content , " ");
+        if(parts.empty()){
+            continue;
+        }
+
+        const std::string type = parts[0];
+    
+        //std::cout << parts[0] << std::endl;
+        if(type == "mtllib"){//
+            std::string foldPath = StringUtils::findDirectoryPath(path);
+            mtlFilePath = foldPath +"\\" +parts[1];
+            //std::cout << "mtl path " << mtlFilePath << std::endl;
+            
+            std::vector<Material> mLists = LoadAndParseMtlFile(mtlFilePath);
+            materialList.insert(materialList.begin() , mLists.begin() , mLists.end());
+            materialList.shrink_to_fit();
+
+            // for(Material &m : materialList){
+            //     std::cout << "->" << m.name << std::endl;
+            // }
+        }else if(type == "o"){
+            objectName = parts[1];
+            std::cout << "objectName ->" << objectName << std::endl;
+        }else if(type == "v"){//顶点坐标
+            glm::vec3 position;
+            position[0] = std::stof(parts[1]);
+            position[1] = std::stof(parts[2]);
+            position[2] = std::stof(parts[3]);
+            positionVec.push_back(position);
+        }else if(type == "vt"){//纹理坐标
+            glm::vec2 texCoord;
+            texCoord[0] = std::stof(parts[1]);
+            texCoord[1] = std::stof(parts[2]);
+            texCoordVec.push_back(texCoord);
+        }else if(type == "vn"){//法线坐标
+            glm::vec3 normal;
+            normal[0] = std::stof(parts[1]);
+            normal[1] = std::stof(parts[2]);
+            normal[2] = std::stof(parts[3]);
+            normalVec.push_back(normal);
+        }else if(type == "g"){
+            ensureMesh();
+            curMesh->group = parts[1];
+        }else if(type == "usemtl"){
+            if(curMesh != nullptr){
+               meshes.push_back(curMesh);
+               curMesh = nullptr;        
+            }
+
+            ensureMesh();
+            Material material = findMaterialByName(parts[1]);
+            curMesh->material = material;
+        }else if(type == "s"){
+            ensureMesh();
+            if(parts[1] == "off" || parts[1] == "1"){
+                curMesh->smooth = false;
+            }else if(parts[1] == "on" || parts[1] == "0"){
+                curMesh->smooth = true;
+            }else{
+                curMesh->smooth = false;
+            }
+        }else if(type == "f"){
+            ensureMesh();
+            readObjFileFaceData(parts , positionVec , texCoordVec , normalVec);
+        }
+    }//end while
+
+    // std::cout << "vertex count = " << positionVec.size() << std::endl;
+    // std::cout << "normal count = " << normalVec.size() << std::endl;
+    // std::cout << "texCoord count = " << texCoordVec.size() << std::endl;
+    // std::cout << "mat name : " << curMesh->material.name << std::endl;
+
+    if(curMesh != nullptr){
+        meshes.push_back(curMesh); 
+        curMesh = nullptr;        
+    }
+    
+    infile.close();
+    return 0;
+}
+
+std::shared_ptr<Mesh> ObjModel::ensureMesh(){
+    if(curMesh == nullptr){
+        curMesh = std::make_shared<Mesh>();
+    }
+
+    return curMesh;
+}
+
+//查找材质列表
+Material ObjModel::findMaterialByName(std::string &materialName){
+    Material result;
+    for(Material &m : materialList){
+        if(m.name == materialName){
+            result = m;
+            break;
+        }
+    }//end for each
+    //std::cout << "Not found material : " << materialName << std::endl;
+    return result;
+}
+
+//
+void ObjModel::readObjFileFaceData(std::vector<std::string> &parts, 
+    std::vector<glm::vec3> &positionVec, 
+    std::vector<glm::vec2> &texCoordVec, 
+    std::vector<glm::vec3> &normalVec)
+{
+    Vertex vertex;
+    int dataCount = StringUtils::countCharAppearTimes(parts[1] , '/');
+
+    switch(dataCount){
+        case 0://仅有顶点信息
+        
+        break;
+        case 1:
+        break;
+        case 2:
+        break;
+        default:
+        break;
+    }
+
+    curMesh->verteices.push_back(vertex);
+}
+

@@ -78,19 +78,5 @@ void Scene::processInput(GLFWwindow *window){
 }
 
 
-void CubeScene::onInit(){
-    grid= new CoordinateGrid();
-    grid->init();
-}
 
-void CubeScene::update(long long deltaTime){
-    grid->render(*camera);
-}
-
-void CubeScene::onDestory(){
-    if(grid != nullptr){
-        delete grid;
-        grid = nullptr;
-    }
-}
 

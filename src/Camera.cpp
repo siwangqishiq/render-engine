@@ -16,7 +16,7 @@ Camera::Camera(const Camera& cam){
     this->position = cam.position;
     this->dest = cam.dest;
     this->aspect = cam.aspect;
-
+    
     worldUp = glm::vec3(0.0f , 1.0f , 0.0f);
     updateCameraData();
 }
@@ -59,5 +59,5 @@ glm::vec3 Camera::getForward(){
 }
 
 Camera::~Camera(){
-    std::cout << "release camera !" << std::endl; 
+    //std::cout << "release camera !" << std::endl; 
 }

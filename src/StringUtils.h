@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 class StringUtils{
 public:
@@ -33,5 +34,22 @@ public:
             splits.push_back(str);
         }
         return splits;
+    }
+
+    //从文件路径中得到文件夹路径
+    static std::string findDirectoryPath(std::string path){
+        std::string directory;
+        const size_t lastSlashIdx = path.rfind('\\');
+        if (std::string::npos != lastSlashIdx)
+        {
+            directory = path.substr(0, lastSlashIdx);
+        }
+        return directory;
+    }
+
+    //统计pttern出现的次数
+    static int countCharAppearTimes(std::string str , char pattern){
+        int times = std::count(str.begin(),str.end(), pattern);
+        return times;
     }
 };

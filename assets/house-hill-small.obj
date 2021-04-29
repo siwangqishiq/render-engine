@@ -1,5 +1,7 @@
 # Blender v2.71 (sub 0) OBJ File: 'print_buildings-houses_v1.blend'
 # www.blender.org
+# mtllib house-hill-small.mtl
+# mtllib Tosa.mtl
 mtllib house-hill-small.mtl
 o house-hill-small_Cube.005
 v 4.000006 -0.000000 3.999993

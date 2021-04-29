@@ -26,12 +26,3 @@ public:
     virtual void processInput(GLFWwindow *window);
 };
 
-class CubeScene :public Scene {
-private:
-    CoordinateGrid *grid;
-
-public:
-    virtual void onInit();
-    virtual void update(long long deltaTime);
-    virtual void onDestory();
-};

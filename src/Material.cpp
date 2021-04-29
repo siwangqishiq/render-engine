@@ -21,4 +21,6 @@ Material::Material(glm::vec3 _diffuse , glm::vec3 _specular , float _shininess) 
     this->diffuse = _diffuse;
     this->specular = _specular;
     this->shininess = _shininess;
+
+    
 }
