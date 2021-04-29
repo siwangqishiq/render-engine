@@ -19,8 +19,8 @@
 
 int main(){
     // std::vector<Material> list = Model::LoadAndParseMtlFile("assets/zero_plane.mtl");
-    // std::vector<Material> list = Model::LoadAndParseMtlFile("assets/Tosa.mtl");
-    std::vector<Material> list = Model::LoadAndParseMtlFile("E:\\assets\\fangzi\\models\\house-hill-small.mtl");
+     std::vector<Material> list = Model::LoadAndParseMtlFile("assets/Tosa.mtl");
+    //std::vector<Material> list = Model::LoadAndParseMtlFile("E:\\assets\\fangzi\\models\\house-hill-small.mtl");
     for(Material &material : list){
         std::cout << material.name <<" ===== " << std::endl;
         std::cout << " Ns = " <<material.shininess << std::endl;

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "StringUtils.h"
 
 Model::Model(){
 
@@ -25,7 +26,7 @@ std::vector<Material> Model::LoadAndParseMtlFile(std::string mtlFilePath){
     std::shared_ptr<Material> curMaterial = nullptr;
     while(std::getline(infile , lineContent)){
         //std::cout << lineContent << std::endl;
-        std::string content = trim(lineContent);
+        std::string content = StringUtils::trim(lineContent);
 
         if(content.empty() || content[0] == '#'){ //
 			continue;
