@@ -30,8 +30,7 @@ class ShowModel : public Scene{
 private:
     ObjModel *objModel;
 public:
-    virtual void onInit(){
-        objModel = new ObjModel();
-        objModel->loadObjFile("E:\\gits\\render-engine\\assets\\house-hill-small.obj");
-    }
+    virtual void onInit();
+
+    virtual void update(long long deltaTime);
 };

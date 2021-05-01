@@ -36,6 +36,12 @@ public:
     std::string group;//顶点集合名称
     Material material;//网格材质
     bool smooth = false;//是否光滑处理
+
+    //初始化网格资源
+    void init();
+
+    //渲染网格
+    void render(Scene &scene);
 };
 
 //obj模型  负责模型的导入与解析
@@ -56,6 +62,9 @@ public:
     void render(Scene &scene);
 
 private:
+    unsigned int vao;
+    unsigned int vbo;
+
     std::shared_ptr<Mesh> curMesh = nullptr;//当前操作网格
 
     std::string objectName;//物体名称
@@ -71,6 +80,13 @@ private:
 
     //读取面数据
     void readObjFileFaceData(std::vector<std::string> &parts, 
+                        std::vector<glm::vec3> &positionVec, 
+                        std::vector<glm::vec2> &texCoordVec,
+                        std::vector<glm::vec3> &normalVec);
+
+
+    //顶点数据读取
+    Vertex readObjFileVertexAttributeData(std::string &vertexStr, 
                         std::vector<glm::vec3> &positionVec, 
                         std::vector<glm::vec2> &texCoordVec,
                         std::vector<glm::vec3> &normalVec);

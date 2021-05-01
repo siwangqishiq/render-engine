@@ -136,7 +136,6 @@ int ObjModel::loadObjFile(std::string path){
     std::string lineContent;
 
     materialList.clear();//材质列表清空
-
     
 
     //postion
@@ -201,14 +200,14 @@ int ObjModel::loadObjFile(std::string path){
             ensureMesh();
             curMesh->group = parts[1];
         }else if(type == "usemtl"){
-            if(curMesh != nullptr){
-               meshes.push_back(curMesh);
-               curMesh = nullptr;        
-            }
+            curMesh = std::make_shared<Mesh>(); 
+            meshes.push_back(curMesh);
+            
+            //std::cout << " meshes.push_back "<< std::endl;
 
-            ensureMesh();
             Material material = findMaterialByName(parts[1]);
             curMesh->material = material;
+            std::cout << "material " << curMesh->material.name << std::endl;
         }else if(type == "s"){
             ensureMesh();
             if(parts[1] == "off" || parts[1] == "1"){
@@ -229,10 +228,10 @@ int ObjModel::loadObjFile(std::string path){
     // std::cout << "texCoord count = " << texCoordVec.size() << std::endl;
     // std::cout << "mat name : " << curMesh->material.name << std::endl;
 
-    if(curMesh != nullptr){
-        meshes.push_back(curMesh); 
-        curMesh = nullptr;        
-    }
+    // if(curMesh != nullptr){
+    //     meshes.push_back(curMesh); 
+    //     curMesh = nullptr;        
+    // }
     
     infile.close();
     return 0;
@@ -242,7 +241,7 @@ std::shared_ptr<Mesh> ObjModel::ensureMesh(){
     if(curMesh == nullptr){
         curMesh = std::make_shared<Mesh>();
     }
-
+    
     return curMesh;
 }
 
@@ -265,21 +264,91 @@ void ObjModel::readObjFileFaceData(std::vector<std::string> &parts,
     std::vector<glm::vec2> &texCoordVec, 
     std::vector<glm::vec3> &normalVec)
 {
-    Vertex vertex;
-    int dataCount = StringUtils::countCharAppearTimes(parts[1] , '/');
-
-    switch(dataCount){
-        case 0://仅有顶点信息
-        
-        break;
-        case 1:
-        break;
-        case 2:
-        break;
-        default:
-        break;
-    }
-
-    curMesh->verteices.push_back(vertex);
+    //std::cout << "parts[1] = " << parts[1] << std::endl;
+    for(int i = 1 ;i <= 3;i++){
+        Vertex vertex = readObjFileVertexAttributeData(parts[i] , positionVec , texCoordVec , normalVec);
+        curMesh->verteices.push_back(vertex);
+    }//end for i
 }
+
+//顶点数据读取
+Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr, 
+                        std::vector<glm::vec3> &positionVec, 
+                        std::vector<glm::vec2> &texCoordVec,
+                        std::vector<glm::vec3> &normalVec)
+{
+    Vertex vertex;
+    std::string subStr = "";
+    const char *cStr = vertexStr.c_str();
+    int index = 0;
+    int step = 0;
+    while(index < vertexStr.length()){
+        if(cStr[index] == '/'){  
+            if(step == 0){//读取顶点位置
+                // std::cout << subStr << std::endl;
+                if(subStr.empty()){
+                    vertex.position = glm::vec3(0);
+                }else{
+                    int indexValue = std::stoi(subStr);
+                    //vertex.position = positionVec.at(indexValue);
+                    vertex.position = positionVec[indexValue];
+                }
+
+                step++;
+            }else if(step == 1){//读取纹理坐标
+                // std::cout << subStr << std::endl;
+                if(subStr.empty()){
+                    vertex.texCoord = glm::vec2(0);
+                }else{
+                    int indexValue = std::stoi(subStr);
+                    vertex.texCoord = texCoordVec[indexValue];
+                }
+                step++;
+            }else if(step == 2){//读取法线坐标
+                //std::cout << subStr << std::endl;
+                step++;
+            }
+            subStr = "";
+        }else{
+            subStr += cStr[index];
+        }
+        index++;
+    }//end while
+    if(step == 2){
+        if(subStr.empty()){
+            vertex.normal = glm::vec3(0);
+        }else{
+            int indexValue = std::stoi(subStr);
+            vertex.normal = normalVec[indexValue];
+        }
+    }
+    
+    //std::cout << std::endl;
+
+    return vertex;
+}
+
+void ObjModel::setupModel(){
+    for(std::shared_ptr<Mesh> &pMesh : meshes){
+        pMesh->init();
+    }//end for each
+}
+
+void ObjModel::render(Scene &scene){
+    for(std::shared_ptr<Mesh> &pMesh : meshes){
+        pMesh->render(scene);
+    }//end for each
+}
+
+void Mesh::init(){
+    //std::cout << "mesh name = " << this->group << " init " << std::endl;
+
+    
+}
+
+void Mesh::render(Scene &scene){
+    std::cout << "mesh render = " << this->group << " render " << std::endl;
+}
+
+
 

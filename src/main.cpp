@@ -6,7 +6,7 @@
 #include "SimpleCube.h"
 #include "Model.h"
 #include "Shader.h"
-#include "demo.hpp"
+#include "demo.h"
 
 int main(){
     ShowModel app;

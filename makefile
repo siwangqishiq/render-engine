@@ -20,6 +20,7 @@ compile: build_dir \
 		${BUILD_DIR}/CubeRender.o \
 		${BUILD_DIR}/Model.o \
 		${BUILD_DIR}/CoordinateGrid.o \
+		${BUILD_DIR}/demo.o \
 		${BUILD_DIR}/main.o 
 
 ${BUILD_DIR}/App.o:${SRC_DIR}/App.cpp
@@ -60,6 +61,9 @@ ${BUILD_DIR}/CoordinateGrid.o:${SRC_DIR}/CoordinateGrid.cpp
 
 ${BUILD_DIR}/SimpleCube.o:${SRC_DIR}/SimpleCube.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/SimpleCube.cpp -o ${BUILD_DIR}/SimpleCube.o -I include/
+
+${BUILD_DIR}/demo.o:${SRC_DIR}/demo.cpp
+	${CC} -std=${STD} -c ${SRC_DIR}/demo.cpp -o ${BUILD_DIR}/demo.o -I include/
 
 ${BUILD_DIR}/main.o:${SRC_DIR}/main.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/main.cpp -o ${BUILD_DIR}/main.o -I include/
