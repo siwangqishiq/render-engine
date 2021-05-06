@@ -24,5 +24,9 @@ public:
     void setCamera(std::shared_ptr<Camera> newCamera);
 
     virtual void processInput(GLFWwindow *window);
+
+    inline std::shared_ptr<Camera> getCamera(){
+        return camera;
+    }
 };
 

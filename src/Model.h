@@ -42,6 +42,11 @@ public:
 
     //渲染网格
     void render(Scene &scene);
+private:
+    Shader shader;
+
+    unsigned int vao;
+    unsigned int vbo;
 };
 
 //obj模型  负责模型的导入与解析

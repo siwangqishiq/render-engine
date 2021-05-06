@@ -342,12 +342,57 @@ void ObjModel::render(Scene &scene){
 
 void Mesh::init(){
     //std::cout << "mesh name = " << this->group << " init " << std::endl;
-
+    shader = Shader::buildGPUProgramFromFile("mesh_vertex.glsl","mesh_fragment.glsl");
     
+    glGenVertexArrays(1 , &vao);
+    glGenBuffers(1 , &vbo);
+    
+    glBindVertexArray(vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER , vbo);
+    
+    glBufferData(GL_ARRAY_BUFFER,verteices.size() * sizeof(Vertex) , &verteices[0] ,  GL_STATIC_DRAW);
+
+    //set vertex attr
+    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , sizeof(Vertex) , (void *)(0 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1 , 2 , GL_FLOAT , GL_FALSE , sizeof(Vertex) , (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2 , 3 , GL_FLOAT , GL_FALSE , sizeof(Vertex) , (void *)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    glBindVertexArray(0);
 }
 
 void Mesh::render(Scene &scene){
-    std::cout << "mesh render = " << this->group << " render " << std::endl;
+    //std::cout << "mesh render = " << this->group << " render " << std::endl;
+    
+    shader.useShader();
+    glBindVertexArray(vao);
+
+    glm::mat4 modelMat = glm::mat4(1.0f);
+    // modelMat = glm::translate(modelMat, glm::vec3(0 , 0 , 0));
+    // modelMat = glm::rotate(modelMat , this->angleX , glm::vec3(1 ,  0, 0));
+    // modelMat = glm::rotate(modelMat , this->angleY , glm::vec3(0 ,  1, 0));
+    // modelMat = glm::rotate(modelMat , this->angleZ , glm::vec3(0 ,  0, 1));
+    //modelMat = glm::scale(modelMat , glm::vec3(3 , 3 , 3));
+    std::shared_ptr<Camera> camera = scene.getCamera();
+
+    glm::vec3 cameraPosition = camera->getPostion();
+    cameraPosition[2] += 1.0;
+    camera->lookAt(glm::vec3(0,0,0));
+    
+    shader.setUniformMat4("modelMat" , modelMat);
+
+    glm::vec3 p = camera->getPostion();
+    shader.setUniformMat4("viewMat", camera->getCameraMatrix());
+    shader.setUniformMat4("projMat", camera->getPerspectiveMatrix());
+
+    glDrawArrays(GL_LINE_LOOP , 0 , this->verteices.size());
+    
+    glBindVertexArray(0);
 }
 
 
