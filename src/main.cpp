@@ -16,7 +16,7 @@ int main(){
 
 
 // int main() {
-//     LoadAndParseMtlFile("assets/zero_plane.mtl");
+//     //LoadAndParseMtlFile("assets/zero_plane.mtl");
 //     SimpleCubeScene app;
     
 //     app.isFullScreen = false;

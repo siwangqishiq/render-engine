@@ -5,7 +5,7 @@
 #include "StringUtils.h"
 
 Model::Model(){
-
+    
 }
 
 Model::~Model(){
@@ -267,6 +267,7 @@ void ObjModel::readObjFileFaceData(std::vector<std::string> &parts,
     //std::cout << "parts[1] = " << parts[1] << std::endl;
     for(int i = 1 ;i <= 3;i++){
         Vertex vertex = readObjFileVertexAttributeData(parts[i] , positionVec , texCoordVec , normalVec);
+        std::cout << "texture coord " << vertex.texCoord.x << "  " << vertex.texCoord.y << std::endl;
         curMesh->verteices.push_back(vertex);
     }//end for i
 }
@@ -282,7 +283,9 @@ Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr,
     const char *cStr = vertexStr.c_str();
     int index = 0;
     int step = 0;
+    std::cout << vertexStr << std::endl;
     while(index < vertexStr.length()){
+        //std::cout << "cStr[index] = " << cStr[index] << std::endl;
         if(cStr[index] == '/'){  
             if(step == 0){//读取顶点位置
                 // std::cout << subStr << std::endl;
@@ -296,7 +299,7 @@ Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr,
 
                 step++;
             }else if(step == 1){//读取纹理坐标
-                // std::cout << subStr << std::endl;
+                //std::cout << subStr << std::endl;
                 if(subStr.empty()){
                     vertex.texCoord = glm::vec2(0);
                 }else{
@@ -314,12 +317,23 @@ Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr,
         }
         index++;
     }//end while
+
+    std::cout << "step = " << step << std::endl;
+
     if(step == 2){
         if(subStr.empty()){
             vertex.normal = glm::vec3(0);
         }else{
             int indexValue = std::stoi(subStr);
             vertex.normal = normalVec[indexValue];
+        }
+    }else if(step == 1){
+        std::cout << subStr << std::endl;
+        if(subStr.empty()){
+            vertex.texCoord = glm::vec2(0);
+        }else{
+            int indexValue = std::stoi(subStr);
+            vertex.texCoord = texCoordVec[indexValue];
         }
     }
     
@@ -328,9 +342,9 @@ Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr,
     return vertex;
 }
 
-void ObjModel::setupModel(){
+void ObjModel::setupModel(Scene &scene){
     for(std::shared_ptr<Mesh> &pMesh : meshes){
-        pMesh->init();
+        pMesh->init(scene);
     }//end for each
 }
 
@@ -340,10 +354,16 @@ void ObjModel::render(Scene &scene){
     }//end for each
 }
 
-void Mesh::init(){
+void Mesh::init(Scene &scene){
     //std::cout << "mesh name = " << this->group << " init " << std::endl;
     shader = Shader::buildGPUProgramFromFile("mesh_vertex.glsl","mesh_fragment.glsl");
     
+    vertexInit();
+
+    materialInit(scene);
+}
+
+void Mesh::vertexInit(){
     glGenVertexArrays(1 , &vao);
     glGenBuffers(1 , &vbo);
     
@@ -357,13 +377,29 @@ void Mesh::init(){
     glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , sizeof(Vertex) , (void *)(0 * sizeof(float)));
     glEnableVertexAttribArray(0);
 
+    //纹理坐标
     glVertexAttribPointer(1 , 2 , GL_FLOAT , GL_FALSE , sizeof(Vertex) , (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    //法线坐标
     glVertexAttribPointer(2 , 3 , GL_FLOAT , GL_FALSE , sizeof(Vertex) , (void *)(5 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
+}
+
+//材质包含的贴图资源导入
+void Mesh::materialInit(Scene &scene){
+    std::string textureFilePath = material.diffuseMapFile;
+    
+    if(textureFilePath.empty())
+        return;
+    
+    std::cout << "load texture file = " << textureFilePath << std::endl;
+    TextureInfo info = scene.loadTexture(textureFilePath , true);
+    std::cout << "file size = " << info.srcWidth << " x " << info.srcHeight << std::endl;
+
+    this->textureId = info.textureId;
 }
 
 void Mesh::render(Scene &scene){
@@ -390,8 +426,12 @@ void Mesh::render(Scene &scene){
     shader.setUniformMat4("viewMat", camera->getCameraMatrix());
     shader.setUniformMat4("projMat", camera->getPerspectiveMatrix());
 
-    glDrawArrays(GL_LINE_LOOP , 0 , this->verteices.size());
-    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D , this->textureId);
+
+    glDrawArrays(GL_TRIANGLES , 0 , this->verteices.size());
+    //glDrawArrays(GL_LINES , 0 , this->verteices.size());
+
     glBindVertexArray(0);
 }
 

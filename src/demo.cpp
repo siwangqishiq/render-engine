@@ -4,7 +4,7 @@ void ShowModel::onInit(){
     objModel = new ObjModel();
     objModel->loadObjFile("assets\\house-hill-small.obj");
     //objModel->loadObjFile("D:\\assets\\untitled.obj");
-
+    
     // std::cout << "mesh size " << objModel->meshes.size() << std::endl;
 
     // for(int i = 0 ; i < objModel->meshes.size();i++){
@@ -14,7 +14,7 @@ void ShowModel::onInit(){
     // }//end for i
     //std::cout << "mesh  " << objModel->meshes.size() << std::endl;
 
-    objModel->setupModel();
+    objModel->setupModel(*this);
 }
 
 void ShowModel::update(long long deltaTime){

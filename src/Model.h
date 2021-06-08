@@ -38,7 +38,13 @@ public:
     bool smooth = false;//是否光滑处理
 
     //初始化网格资源
-    void init();
+    void init(Scene &scene);
+
+    //顶点属性导入
+    void vertexInit();
+
+    //材质相关资源导入
+    void materialInit(Scene &scene);
 
     //渲染网格
     void render(Scene &scene);
@@ -47,6 +53,8 @@ private:
 
     unsigned int vao;
     unsigned int vbo;
+
+    unsigned int textureId;
 };
 
 //obj模型  负责模型的导入与解析
@@ -61,7 +69,7 @@ public:
     std::vector<std::shared_ptr<Mesh>> meshes;
 
     //装载模型  完成初始化 纹理载入等
-    void setupModel();
+    void setupModel(Scene &scene);
 
     //渲染模型
     void render(Scene &scene);

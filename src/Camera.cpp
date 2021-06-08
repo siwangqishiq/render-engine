@@ -45,7 +45,7 @@ void Camera::movePosition(glm::vec3 _pos){
     updateCameraData();
 
     glm::vec3 p = this->getPostion();
-    std::cout << "pos22 = " << p[0] << " " << p[1] << " " << p[2] << std::endl;
+    //std::cout << "pos22 = " << p[0] << " " << p[1] << " " << p[2] << std::endl;
 }
 
 //透视矩阵
