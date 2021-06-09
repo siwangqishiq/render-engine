@@ -94,10 +94,22 @@ TextureInfo App::loadTexture(std::string filename){
 }
 
 TextureInfo App::loadTexture(std::string filename , bool releaseData){
+	if(hasLoadedTextures.find(filename) != hasLoadedTextures.end()){//此filename之前已被载入过
+		return hasLoadedTextures[filename];
+	}
+
 	TextureInfo info;
 	
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char *imageData = stbi_load((ASSETS_FOLDER + filename).c_str() , &info.srcWidth , &info.srcHeight , &info.channel , 0);
+
+	unsigned char *imageData = nullptr;
+
+	if(filename.rfind("D:" , 0) == 0 || filename.rfind("E:" , 0) == 0){
+		imageData = stbi_load(filename.c_str() , &info.srcWidth , &info.srcHeight , &info.channel , 0);
+	}else{
+		imageData = stbi_load((ASSETS_FOLDER + filename).c_str() , &info.srcWidth , &info.srcHeight , &info.channel , 0);
+	}
+	
 	//stbi_set_flip_vertically_on_load(false);
 
 	if(imageData){
@@ -131,6 +143,9 @@ TextureInfo App::loadTexture(std::string filename , bool releaseData){
 	if(releaseData){
 		stbi_image_free(imageData);
 	}
+
+	//加入map 防止后面重复加载
+	hasLoadedTextures[filename] = info;
 	return info;
 }
 

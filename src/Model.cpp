@@ -267,7 +267,7 @@ void ObjModel::readObjFileFaceData(std::vector<std::string> &parts,
     //std::cout << "parts[1] = " << parts[1] << std::endl;
     for(int i = 1 ;i <= 3;i++){
         Vertex vertex = readObjFileVertexAttributeData(parts[i] , positionVec , texCoordVec , normalVec);
-        std::cout << "texture coord " << vertex.texCoord.x << "  " << vertex.texCoord.y << std::endl;
+        //std::cout << "texture coord " << vertex.texCoord.x << "  " << vertex.texCoord.y << std::endl;
         curMesh->verteices.push_back(vertex);
     }//end for i
 }
@@ -283,7 +283,7 @@ Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr,
     const char *cStr = vertexStr.c_str();
     int index = 0;
     int step = 0;
-    std::cout << vertexStr << std::endl;
+    //std::cout << vertexStr << std::endl;
     while(index < vertexStr.length()){
         //std::cout << "cStr[index] = " << cStr[index] << std::endl;
         if(cStr[index] == '/'){  
@@ -318,7 +318,7 @@ Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr,
         index++;
     }//end while
 
-    std::cout << "step = " << step << std::endl;
+    // std::cout << "step = " << step << std::endl;
 
     if(step == 2){
         if(subStr.empty()){
@@ -328,7 +328,7 @@ Vertex ObjModel::readObjFileVertexAttributeData(std::string &vertexStr,
             vertex.normal = normalVec[indexValue];
         }
     }else if(step == 1){
-        std::cout << subStr << std::endl;
+        // std::cout << subStr << std::endl;
         if(subStr.empty()){
             vertex.texCoord = glm::vec2(0);
         }else{

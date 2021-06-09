@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <map>
 #include "config.h"
 
 
@@ -57,6 +58,9 @@ protected:
 
 	long long startRenderTime = -1;
 	long long lastRenderTime = -1;
+
+private:
+	std::map<std::string , TextureInfo> hasLoadedTextures;//已载入的纹理数据
 };
 
 
