@@ -9,7 +9,8 @@
 #include "demo.h"
 
 int main(){
-    ShowModel app;
+    //ShowModel app;
+    FontTest app;
     app.init();
     return app.mainLoop();
 }

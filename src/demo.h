@@ -3,6 +3,7 @@
 #include "config.h"
 #include "Scene.h"
 #include "Model.h"
+#include "Text.h"
 
 class CubeScene :public Scene {
 private:
@@ -33,4 +34,11 @@ public:
     virtual void onInit();
 
     virtual void update(long long deltaTime);
+};
+
+class FontTest : public Scene{
+public:
+    virtual void onInit();
+
+    virtual void update(long long deltaTime); 
 };

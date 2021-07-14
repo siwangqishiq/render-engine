@@ -20,3 +20,12 @@ void ShowModel::onInit(){
 void ShowModel::update(long long deltaTime){
     objModel->render(*this);
 }
+
+void FontTest::onInit(){
+    Text text;
+    text.init();
+}
+
+void FontTest::update(long long deltaTime){
+    //std::cout << "font text update" << std::endl;
+}

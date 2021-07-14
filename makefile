@@ -20,6 +20,7 @@ compile: build_dir \
 		${BUILD_DIR}/CubeRender.o \
 		${BUILD_DIR}/Model.o \
 		${BUILD_DIR}/CoordinateGrid.o \
+		${BUILD_DIR}/Text.o \
 		${BUILD_DIR}/demo.o \
 		${BUILD_DIR}/main.o 
 
@@ -62,6 +63,9 @@ ${BUILD_DIR}/CoordinateGrid.o:${SRC_DIR}/CoordinateGrid.cpp
 ${BUILD_DIR}/SimpleCube.o:${SRC_DIR}/SimpleCube.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/SimpleCube.cpp -o ${BUILD_DIR}/SimpleCube.o -I include/
 
+${BUILD_DIR}/Text.o:${SRC_DIR}/Text.cpp
+	${CC} -std=${STD} -c ${SRC_DIR}/Text.cpp -o ${BUILD_DIR}/Text.o -I include/
+
 ${BUILD_DIR}/demo.o:${SRC_DIR}/demo.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/demo.cpp -o ${BUILD_DIR}/demo.o -I include/
 
@@ -69,7 +73,7 @@ ${BUILD_DIR}/main.o:${SRC_DIR}/main.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/main.cpp -o ${BUILD_DIR}/main.o -I include/
 
 link:compile
-	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/main.exe -Llib -lglfw3dll -lopengl32 
+	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/main.exe -Llib -lglfw3dll -lfreetypedll -lopengl32 
 	
 run:link
 	${BUILD_DIR}/main
@@ -85,7 +89,7 @@ assemble:link
 	cp -r assets ${BUILD_DIR}/${OUTPUT}
 	cp -r shader ${BUILD_DIR}/${OUTPUT}
 	cp -r ${BUILD_DIR}/main.exe ${BUILD_DIR}/${OUTPUT}
-	cp -r glfw3.dll ${BUILD_DIR}/${OUTPUT}
+	cp -r *.dll ${BUILD_DIR}/${OUTPUT}
 
 clean:
 	rm -f ${BUILD_DIR}/*.o 
