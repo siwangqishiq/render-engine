@@ -22,10 +22,15 @@ void ShowModel::update(long long deltaTime){
 }
 
 void FontTest::onInit(){
-    Text text;
-    text.init();
+    text = std::make_shared<Text>(screenWidth , screenHeight);
+    text->init();
 }
 
 void FontTest::update(long long deltaTime){
     //std::cout << "font text update" << std::endl;
+    text->renderText(40.0f , 40.0f , L"你" , glm::vec4(1.0f , 0.0f , 0.0f , 1.0f));
+}
+
+void FontTest::onDestory(){
+    text->free();
 }

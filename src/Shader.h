@@ -46,11 +46,15 @@ public:
     //设置三维向量 
     void setUniformVec3(std::string key ,glm::vec3 value);
 
+    //设置四维向量
+    void setUniformVec4(std::string key , glm::vec4 vec);
+
     void setUniformBool(std::string key , bool value);
     
     int findUniformLocation(std::string key);
-protected:
+
     unsigned int programId;
+protected:
     std::unordered_map<std::string , int> unifromLocs; //unifrom变量loccation
 };
 

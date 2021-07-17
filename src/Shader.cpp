@@ -120,6 +120,11 @@ void Shader::setUniformMat4(std::string key , glm::mat4 mat){
 	glUniformMatrix4fv(loc , 1 , GL_FALSE , glm::value_ptr(mat));
 }
 
+void Shader::setUniformVec4(std::string key , glm::vec4 vec){
+	GLint loc = findUniformLocation(key);
+	glUniform4fv(loc , 1 ,  (float *)(&vec[0]));
+}
+
 void Shader::setUniformVec3(std::string key , float x , float y , float z){
 	GLint loc = findUniformLocation(key);
 	glUniform3f(loc , x , y , z);

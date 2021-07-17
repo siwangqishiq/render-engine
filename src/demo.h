@@ -37,8 +37,13 @@ public:
 };
 
 class FontTest : public Scene{
+
 public:
+    std::shared_ptr<Text> text;
+
     virtual void onInit();
 
     virtual void update(long long deltaTime); 
+
+    virtual void onDestory();
 };
