@@ -21,7 +21,7 @@ public:
 
     int init();
 
-    void renderText(int x , int y ,std::wstring content , glm::vec4 color ,float scale = 1.0f);
+    void renderText(int x , int y ,std::wstring content , glm::vec4 color);
 
     void free();
 private:

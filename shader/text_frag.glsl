@@ -11,5 +11,5 @@ void main(){
     vec4 sampled = vec4(1.0, 1.0, 1.0, texture(fontTexture, vTexUv).r);
     fragColor = fontColor * sampled;
 
-    fragColor = vec4(0.0,0.0,1.0,1.0);
+    //fragColor = vec4(1.0,0.0,0.0,1.0);
 }

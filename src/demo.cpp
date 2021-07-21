@@ -28,7 +28,8 @@ void FontTest::onInit(){
 
 void FontTest::update(long long deltaTime){
     //std::cout << "font text update" << std::endl;
-    text->renderText(40.0f , 40.0f , L"你" , glm::vec4(1.0f , 0.0f , 0.0f , 1.0f));
+    text->renderText(100.0f , 300.0f , L"你好 世界 魑魅魍魉 日语 さようなら。" , 
+        glm::vec4(1.0f , 1.0f , 0.0f , 1.0f));
 }
 
 void FontTest::onDestory(){

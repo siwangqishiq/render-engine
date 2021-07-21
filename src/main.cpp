@@ -8,11 +8,24 @@
 #include "Shader.h"
 #include "demo.h"
 
+#include <stdio.h>
+
 int main(){
-    //ShowModel app;
+    // ShowModel app;
     FontTest app;
     app.init();
     return app.mainLoop();
+
+    return 0;
+}
+
+void testOrthMatrix(){
+    // glm::vec4 v1(1200.0f , 800.0f , 0.0f , 1.0f );
+    // glm::vec4 v3(1200.0f , 800.0f , 0.0f , 1.0f );
+    // glm::mat4 m = glm::ortho(0.0f, 1200.0f , 0.0f , 800.0f);
+
+    // glm::vec4 v2 = v3 * m - glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
+    // printf("v2 = %f , %f , %f ,%f \n" , v2[0] , v2[1] , v2[2] , v2[3]);
 }
 
 
