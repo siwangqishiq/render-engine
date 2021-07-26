@@ -35,3 +35,15 @@ void FontTest::update(long long deltaTime){
 void FontTest::onDestory(){
     text->free();
 }
+
+
+void FboTest::onInit(){
+    
+}
+
+void FboTest::update(long long deltaTime){
+    
+}
+
+void FboTest::onDestory(){
+}

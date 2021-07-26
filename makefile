@@ -21,6 +21,7 @@ compile: build_dir \
 		${BUILD_DIR}/Model.o \
 		${BUILD_DIR}/CoordinateGrid.o \
 		${BUILD_DIR}/Text.o \
+		${BUILD_DIR}/Fbo.o \
 		${BUILD_DIR}/demo.o \
 		${BUILD_DIR}/main.o 
 
@@ -65,6 +66,9 @@ ${BUILD_DIR}/SimpleCube.o:${SRC_DIR}/SimpleCube.cpp
 
 ${BUILD_DIR}/Text.o:${SRC_DIR}/Text.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/Text.cpp -o ${BUILD_DIR}/Text.o -I include/
+
+${BUILD_DIR}/Fbo.o:${SRC_DIR}/Fbo.cpp
+	${CC} -std=${STD} -c ${SRC_DIR}/Fbo.cpp -o ${BUILD_DIR}/Fbo.o -I include/
 
 ${BUILD_DIR}/demo.o:${SRC_DIR}/demo.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/demo.cpp -o ${BUILD_DIR}/demo.o -I include/

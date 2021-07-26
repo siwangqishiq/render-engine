@@ -12,7 +12,9 @@
 
 int main(){
     // ShowModel app;
-    FontTest app;
+    // FontTest app;
+    FboTest app;
+    // app.isFullScreen = true;
     app.init();
     return app.mainLoop();
 

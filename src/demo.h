@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Model.h"
 #include "Text.h"
+#include "fbo.h"
 
 class CubeScene :public Scene {
 private:
@@ -40,6 +41,17 @@ class FontTest : public Scene{
 
 public:
     std::shared_ptr<Text> text;
+
+    virtual void onInit();
+
+    virtual void update(long long deltaTime); 
+
+    virtual void onDestory();
+};
+
+class FboTest : public Scene {
+public :
+    std::shared_ptr<OffScreenTexture> mOffScreenTexture;
 
     virtual void onInit();
 
