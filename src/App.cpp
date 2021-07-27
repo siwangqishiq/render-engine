@@ -46,9 +46,9 @@ int App::mainLoop(){
 	while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		// glClearColor(0, 0, 0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        // glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		
 		long long deltaTime = 0;
 		long long currentTimeM = currentTime();
@@ -82,7 +82,7 @@ void App::onInit(){
 
 void App::update(long long deltaTime){
 	//std::cout << "update " << deltaTime << std::endl;
-
+	
 }
 
 void App::onDestory(){

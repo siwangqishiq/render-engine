@@ -23,6 +23,9 @@ struct TextureInfo{
 
 class App{
 public:
+	const int screenWidth = 1280;
+	const int screenHeight = 800;
+
 	GLFWwindow* window;
 
 	bool isFullScreen = false;
@@ -51,10 +54,7 @@ public:
 	~App();
 
 protected:
-	std::string title = "Fuck Alibaba suck my dick!!!";
-
-	const int screenWidth = 1280;
-	const int screenHeight = 800;
+	std::string title = "Hello Engine";
 
 	long long startRenderTime = -1;
 	long long lastRenderTime = -1;
