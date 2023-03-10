@@ -2,7 +2,8 @@
 
 void ShowModel::onInit(){
     objModel = new ObjModel();
-    objModel->loadObjFile("E:\\assets\\model\\lapu\\obj\\lap.obj");
+    // objModel->loadObjFile("E:\\assets\\model\\plane\\obj\\untitled.obj");
+    objModel->loadObjFile("E:\\assets\\model\\yoki\\obj\\yoki.obj");
     //objModel->loadObjFile("D:\\assets\\untitled.obj");
     
     // std::cout << "mesh size " << objModel->meshes.size() << std::endl;

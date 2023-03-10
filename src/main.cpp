@@ -11,9 +11,9 @@
 #include <stdio.h>
 
 int main(){
-    // ShowModel app;
+    ShowModel app;
     // FontTest app;
-    FboTest app;
+    // FboTest app;
     // app.isFullScreen = true;
     app.init();
     return app.mainLoop();
